@@ -1,6 +1,7 @@
 package com.example.ciclocare.ui.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,8 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.ciclocare.MainActivity
 import com.example.ciclocare.R
 import com.example.ciclocare.ui.theme.PrimaryColor
 
@@ -41,8 +47,12 @@ fun LogIn (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "Log in", modifier = modifier)
-
+        Text(
+            text = "Log in",
+            modifier = modifier,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
+        )
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "App logo"
@@ -53,7 +63,14 @@ fun LogIn (
             value = username,
             onValueChange = { username = it },
             label = { Text("Usuario") },
-            singleLine = true
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -63,7 +80,14 @@ fun LogIn (
             onValueChange = { password = it },
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
-            singleLine = true
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -78,5 +102,18 @@ fun LogIn (
         ) {
             Text("Iniciar sesión")
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Texto clicable para registrarse
+        Text(
+            text = "¿No estás registrada? Regístrate",
+            color = PrimaryColor,
+            textDecoration = TextDecoration.Underline,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.clickable {
+                /* llevar a registro al pinchar el texto */
+            }
+        )
     }
 }
