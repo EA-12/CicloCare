@@ -48,7 +48,7 @@ fun App() {
      composable("cuestionarios") { Cuestionarios(navController) }
     }
     */
-    val screen = 3
+    val screen = 0
     if (screen == 0) {
         LogIn()
     }
