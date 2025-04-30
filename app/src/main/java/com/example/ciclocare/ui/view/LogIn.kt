@@ -128,7 +128,7 @@ fun LogIn (
 
         // Texto clicable para registrarse
         Text(
-            text = "¿No estás registrada? Regístrate",
+            text = "¿No está registrada? Regístrese",
             color = PrimaryColor,
             textDecoration = TextDecoration.Underline,
             fontWeight = FontWeight.Medium,
