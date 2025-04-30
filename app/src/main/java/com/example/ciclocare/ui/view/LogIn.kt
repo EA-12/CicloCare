@@ -43,6 +43,8 @@ fun LogIn (
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
 
     Column(
         modifier = modifier
@@ -97,32 +99,44 @@ fun LogIn (
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
+            errorMessage = null // limpiamos mensaje anterior
+
             if (username == "" && password == "") {
-                onFormularioChange(Formulario(
-                    nombre = "Paquita",
-                    apellidos = "García Ibáñez",
-                    dni = "12345678A",
-                    peso = "106",
-                    altura = "1,70",
-                    fechaNacimiento = "1990-01-01",
-                ))
+                onFormularioChange(
+                    Formulario(
+                        nombre = "Paquita",
+                        apellidos = "García Ibáñez",
+                        dni = "12345678A",
+                        peso = "106",
+                        altura = "1,70",
+                        fechaNacimiento = "1990-01-01",
+                    )
+                )
                 navController.navigate("pantallaPrincipal")
-            }
-            if (username == "admin" && password == "admin") {
+            } else if (username == "admin" && password == "admin") {
                 navController.navigate("pantallaPrincipal")
             } else {
-                // Aquí puedes mostrar un mensaje de error o realizar alguna acción
+                errorMessage = "Usuario o contraseña incorrectos"
             }
         },
-            colors = ButtonDefaults.run {
-                buttonColors(
-                        containerColor = PrimaryColor,
-                        contentColor = Color.White
-                    )
-            }
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PrimaryColor,
+                contentColor = Color.White
+            )
         ) {
             Text("Iniciar sesión")
         }
+
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage!!,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 12.dp)
+            )
+        }
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
