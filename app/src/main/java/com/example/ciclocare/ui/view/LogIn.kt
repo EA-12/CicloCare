@@ -32,10 +32,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ciclocare.MainActivity
 import com.example.ciclocare.R
+import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
 
 @Composable
 fun LogIn (
+    onFormularioChange: (Formulario) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -95,7 +97,22 @@ fun LogIn (
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            navController.navigate("pantallaPrincipal")
+            if (username == "" && password == "") {
+                onFormularioChange(Formulario(
+                    nombre = "Paquita",
+                    apellidos = "García Ibáñez",
+                    dni = "12345678A",
+                    peso = "106",
+                    altura = "1,70",
+                    fechaNacimiento = "1990-01-01",
+                ))
+                navController.navigate("pantallaPrincipal")
+            }
+            if (username == "admin" && password == "admin") {
+                navController.navigate("pantallaPrincipal")
+            } else {
+                // Aquí puedes mostrar un mensaje de error o realizar alguna acción
+            }
         },
             colors = ButtonDefaults.run {
                 buttonColors(

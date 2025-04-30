@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ciclocare.R
+import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
 
 @Composable
 fun Home (
+    formulario: Formulario,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -37,7 +39,7 @@ fun Home (
             contentDescription = "App logo"
         )
         Text(
-            text = "¡Bienvenida a CicloCare!",
+            text = "¡Bienvenida a CicloCare, ${formulario.nombre}!",
             modifier = modifier.padding(top = 16.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
