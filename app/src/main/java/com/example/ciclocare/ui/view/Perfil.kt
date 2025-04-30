@@ -9,11 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.ciclocare.ui.constants.Formulario
 
 @Composable
 fun Perfil (
+    formulario: Formulario,
+    navController: NavController,
     modifier: Modifier = Modifier
-) {
+): Formulario {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -22,5 +26,7 @@ fun Perfil (
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = "Perfil", modifier = modifier)
+        Text(text= "Nombre: ${formulario.nombre}", modifier = modifier)
     }
+    return formulario
 }

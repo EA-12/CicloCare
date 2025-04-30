@@ -40,14 +40,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.ciclocare.R
+import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
 import java.util.Calendar
 
 @Composable
 fun Registro (
+    formulario: Formulario,
+    navController: NavController,
     modifier: Modifier = Modifier
-) {
+): Formulario {
 
     val context = LocalContext.current
     var calendario = Calendar.getInstance()
@@ -109,7 +113,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = nombre,
-            onValueChange = { nombre = it },
+            onValueChange = {
+                nombre = it
+                formulario.nombre = it
+            },
             label = { Text("Nombre") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -118,7 +125,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = apellidos,
-            onValueChange = { apellidos = it },
+            onValueChange = {
+                apellidos = it
+                formulario.apellidos = it
+            },
             label = { Text("Apellidos") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -127,7 +137,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = dni,
-            onValueChange = { dni = it },
+            onValueChange = {
+                dni = it
+                formulario.dni = it
+            },
             label = { Text("DNI") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -136,7 +149,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = peso,
-            onValueChange = { peso = it },
+            onValueChange = {
+                peso = it
+                formulario.peso = it
+            },
             label = { Text("Peso") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -145,7 +161,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = altura,
-            onValueChange = { altura = it },
+            onValueChange = {
+                altura = it
+                formulario.altura = it
+            },
             label = { Text("Altura") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -154,7 +173,10 @@ fun Registro (
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = fechaNacimiento,
-            onValueChange = {},
+            onValueChange = {
+                fechaNacimiento = it
+                formulario.fechaNacimiento = it
+            },
             modifier = Modifier
                 .clickable { mostrarDatePicker = true },
             label = { Text("Fecha de nacimiento") },
@@ -171,7 +193,7 @@ fun Registro (
             }
         )
         Spacer(modifier = modifier.padding(top = 24.dp))
-        Button(onClick = {  },
+        Button(onClick = { navController.navigate("pantallaPrincipal") },
             colors = ButtonDefaults.run {
                 buttonColors(
                     containerColor = PrimaryColor,
@@ -185,4 +207,5 @@ fun Registro (
         }
         Spacer(modifier = modifier.padding(top = 80.dp))
     }
+    return formulario
 }

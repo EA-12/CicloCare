@@ -29,12 +29,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ciclocare.MainActivity
 import com.example.ciclocare.R
 import com.example.ciclocare.ui.theme.PrimaryColor
 
 @Composable
 fun LogIn (
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     var username by remember { mutableStateOf("") }
@@ -92,7 +94,9 @@ fun LogIn (
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /* Acción de login aquí */ },
+        Button(onClick = {
+            navController.navigate("pantallaPrincipal")
+        },
             colors = ButtonDefaults.run {
                 buttonColors(
                         containerColor = PrimaryColor,
@@ -112,7 +116,7 @@ fun LogIn (
             textDecoration = TextDecoration.Underline,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.clickable {
-                /* llevar a registro al pinchar el texto */
+                navController.navigate("registro")
             }
         )
     }

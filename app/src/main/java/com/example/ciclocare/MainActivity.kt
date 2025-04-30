@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ciclocare.ui.components.BottomNavBar
+import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.constants.NavItemList
 import com.example.ciclocare.ui.theme.CicloCareTheme
 import com.example.ciclocare.ui.view.Consejos
@@ -24,6 +25,13 @@ import com.example.ciclocare.ui.view.LogIn
 import com.example.ciclocare.ui.view.Monitorizacion
 import com.example.ciclocare.ui.view.Perfil
 import com.example.ciclocare.ui.view.Registro
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
  class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -41,31 +49,21 @@ import com.example.ciclocare.ui.view.Registro
 
 @Composable
 fun App() {
-    /*
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
-     composable("home") { Home(navController) }
-     composable("cuestionarios") { Cuestionarios(navController) }
-    }
-    */
-    val screen = 1
-    if (screen == 0) {
-        LogIn()
-    }
-    if (screen == 1) {
-        Registro()
-    }
-    if (screen == 2) {
-        Perfil()
-    }
-    if (screen == 3) {
-        BottomNavScreen()
+    var formulario by remember { mutableStateOf(Formulario()) }
+
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") { LogIn(navController) }
+        composable("pantallaPrincipal") { BottomNavScreen(navController) }
+        composable("registro") { formulario = Registro(formulario, navController) }
+        composable("perfil") { Perfil(formulario, navController) }
+        composable("cuestionarios") { Cuestionarios(navController) }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavScreen () {
+fun BottomNavScreen (navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -78,15 +76,15 @@ fun BottomNavScreen () {
             )
         }
     ) {
-        ContentScreen(selectedIndex)
+        ContentScreen(selectedIndex, navController)
     }
 }
 
 @Composable
-fun ContentScreen (selectedIndex: Int) {
+fun ContentScreen (selectedIndex: Int, navController: NavController) {
     when(selectedIndex) {
-        0 -> Home()
-        1 -> Cuestionarios()
+        0 -> Home(navController)
+        1 -> Cuestionarios(navController)
         2 -> Monitorizacion()
         3 -> Consejos()
     }
