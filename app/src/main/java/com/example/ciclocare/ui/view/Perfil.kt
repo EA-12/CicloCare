@@ -157,6 +157,31 @@ fun Perfil(
             ) {
                 Text("Volver")
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    // 1. Borrar el formulario en memoria
+                    UsuarioActual.formulario = Formulario()
+
+                    // 2. Borrar el formulario guardado
+                    CoroutineScope(Dispatchers.IO).launch {
+                        FormularioPrefs.guardarFormulario(context, Formulario()) // Guardamos vacío
+                    }
+
+                    // 3. Navegar a login (y limpiar el back stack)
+                    navController.navigate("login") {
+                        popUpTo("pantallaPrincipal") { inclusive = true }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray,
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier.fillMaxWidth(0.8f)
+            ) {
+                Text("Cerrar sesión")
+            }
         }
     }
 }
