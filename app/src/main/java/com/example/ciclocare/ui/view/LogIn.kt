@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -20,13 +21,20 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ciclocare.MainActivity
 import com.example.ciclocare.R
 import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
+import androidx.compose.ui.platform.LocalContext
+import com.example.ciclocare.ui.constants.FormularioPrefs
+import com.example.ciclocare.ui.constants.UsuarioActual
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun LogIn(
-    onFormularioChange: (Formulario) -> Unit,
+fun LogIn (
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -34,19 +42,19 @@ fun LogIn(
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black) // Fondo negro
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "Log in",
+            modifier = modifier,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = Color.White // texto blanco sobre fondo negro
+            fontSize = 20.sp
         )
 
         Image(
@@ -59,16 +67,14 @@ fun LogIn(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Usuario", color = Color.White) },
+            label = { Text("DNI") },
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedContainerColor = Color.DarkGray,
-                unfocusedContainerColor = Color.DarkGray,
-                disabledContainerColor = Color.DarkGray,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.LightGray
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White
             )
         )
 
@@ -77,44 +83,51 @@ fun LogIn(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña", color = Color.White) },
+            label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedContainerColor = Color.DarkGray,
-                unfocusedContainerColor = Color.DarkGray,
-                disabledContainerColor = Color.DarkGray,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.LightGray
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+        val context = LocalContext.current
+        Button(onClick = {
+            errorMessage = null // limpiamos mensaje anterior
 
-        Button(
-            onClick = {
-                errorMessage = null
+            CoroutineScope(Dispatchers.IO).launch {
+                val formulario = FormularioPrefs.cargarFormulario(context)
 
-                if (username == "" && password == "") {
-                    onFormularioChange(
-                        Formulario(
-                            nombre = "Paquita",
-                            apellidos = "García Ibáñez",
-                            dni = "12345678A",
-                            peso = "106",
-                            altura = "1,70",
-                            fechaNacimiento = "1990-01-01",
-                        )
-                    )
-                    navController.navigate("pantallaPrincipal")
+                if (formulario.dni == username) {
+                    UsuarioActual.formulario = formulario
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("pantallaPrincipal")
+                    }
                 } else if (username == "admin" && password == "admin") {
-                    navController.navigate("pantallaPrincipal")
-                } else {
-                    errorMessage = "Usuario o contraseña incorrectos"
+                    // Carga un usuario falso para pruebas
+                    UsuarioActual.formulario = Formulario(
+                        nombre = "Administrador",
+                        apellidos = "App",
+                        dni = "admin",
+                        peso = "-",
+                        altura = "-",
+                        fechaNacimiento = "-"
+                    )
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("pantallaPrincipal")
+                    }
+            } else {
+                    withContext(Dispatchers.Main) {
+                        errorMessage = "DNI o contraseña incorrectos"
+                    }
                 }
-            },
+            }
+        },
             colors = ButtonDefaults.buttonColors(
                 containerColor = PrimaryColor,
                 contentColor = Color.White
@@ -122,6 +135,7 @@ fun LogIn(
         ) {
             Text("Iniciar sesión")
         }
+
 
         if (errorMessage != null) {
             Text(
@@ -132,8 +146,10 @@ fun LogIn(
             )
         }
 
+
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Texto clicable para registrarse
         Text(
             text = "¿No está registrada? Regístrese",
             color = PrimaryColor,

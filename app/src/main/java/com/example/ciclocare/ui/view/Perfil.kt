@@ -19,22 +19,26 @@ import com.example.ciclocare.R
 import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
+import com.example.ciclocare.ui.constants.UsuarioActual
+import com.example.ciclocare.ui.constants.FormularioPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun Perfil(
-    formularioInicial: Formulario,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var enEdicion by remember { mutableStateOf(false) }
-    var formulario by remember { mutableStateOf(formularioInicial) }
+    var formulario by remember { mutableStateOf(UsuarioActual.formulario) }
 
     Surface(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        color = Color(0xFFD8EFFE) // Fondo pastel azul
-
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,6 +122,12 @@ fun Perfil(
 
             Button(
                 onClick = {
+                    if (enEdicion) {
+                        UsuarioActual.formulario = formulario
+                        CoroutineScope(Dispatchers.IO).launch {
+                            FormularioPrefs.guardarFormulario(context, formulario)
+                        }
+                    }
                     enEdicion = !enEdicion
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor),

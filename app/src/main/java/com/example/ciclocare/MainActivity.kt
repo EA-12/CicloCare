@@ -47,20 +47,19 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun App() {
     val navController = rememberNavController()
-    var formulario by remember { mutableStateOf(Formulario()) }
 
     NavHost(navController = navController, startDestination = "login") {
-        composable("login") { LogIn(onFormularioChange = { formulario = it }, navController) }
-        composable("pantallaPrincipal") { BottomNavScreen(navController, formulario) }
-        //composable("registro") { formulario = Registro(formulario, navController) }
-        composable("perfil") { Perfil(formulario, navController) }
+        composable("login") { LogIn(navController) }
+        composable("pantallaPrincipal") { BottomNavScreen(navController) }
+        composable("registro") {Registro(navController) }
+        composable("perfil") { Perfil(navController) }
         composable("cuestionarios") { Cuestionarios(navController) }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavScreen (navController: NavController, formulario: Formulario) {
+fun BottomNavScreen (navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -73,14 +72,14 @@ fun BottomNavScreen (navController: NavController, formulario: Formulario) {
             )
         }
     ) {
-        ContentScreen(selectedIndex, navController, formulario)
+        ContentScreen(selectedIndex, navController)
     }
 }
 
 @Composable
-fun ContentScreen (selectedIndex: Int, navController: NavController, formulario: Formulario) {
+fun ContentScreen (selectedIndex: Int, navController: NavController) {
     when(selectedIndex) {
-        0 -> Home(formulario, navController)
+        0 -> Home(navController)
         1 -> Cuestionarios(navController)
         2 -> Monitorizacion()
         3 -> Consejos()

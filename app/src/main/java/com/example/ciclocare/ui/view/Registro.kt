@@ -43,32 +43,40 @@ import androidx.compose.ui.unit.dp
 import com.example.ciclocare.R
 import com.example.ciclocare.ui.theme.PrimaryColor
 import java.util.Calendar
-
+import com.example.ciclocare.ui.constants.FormularioPrefs
+import com.example.ciclocare.ui.constants.UsuarioActual
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import androidx.navigation.NavController
 @Composable
 fun Registro (
+    //formulario: Formulario,
+    navController: NavController,
     modifier: Modifier = Modifier
-) {
+){
+//: Formulario {
 
     val context = LocalContext.current
-    var calendario = Calendar.getInstance()
-    val anio = calendario.get(Calendar.YEAR)
-    val mes = calendario.get(Calendar.MONTH)
-    val dia = calendario.get(Calendar.DAY_OF_MONTH)
-
-    var nombre by remember { mutableStateOf("") }
-    var apellidos by remember { mutableStateOf("") }
-    var dni by remember { mutableStateOf("") }
-    var peso by remember { mutableStateOf("") }
-    var altura by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-
+//    var calendario = Calendar.getInstance()
+//    val anio = calendario.get(Calendar.YEAR)
+//    val mes = calendario.get(Calendar.MONTH)
+//    val dia = calendario.get(Calendar.DAY_OF_MONTH)
+//
+//    var nombre by remember { mutableStateOf("") }
+//    var apellidos by remember { mutableStateOf("") }
+//    var dni by remember { mutableStateOf("") }
+//    var peso by remember { mutableStateOf("") }
+//    var altura by remember { mutableStateOf("") }
+//    var fechaNacimiento by remember { mutableStateOf("") }
+    var formulario by remember { mutableStateOf(UsuarioActual.formulario) }
     var mostrarDatePicker by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
     if (mostrarDatePicker) {
-        val calendarioInicial = if (fechaNacimiento.isNotEmpty()) {
-            val partes = fechaNacimiento.split("/")
+        val calendarioInicial = if (formulario.fechaNacimiento.isNotEmpty()) {
+            val partes = formulario.fechaNacimiento.split("/")
             Calendar.getInstance().apply {
                 set(Calendar.DAY_OF_MONTH, partes[0].toInt())
                 set(Calendar.MONTH, partes[1].toInt() - 1)
@@ -86,7 +94,7 @@ fun Registro (
             context,
             { _, y, m, d ->
                 val fecha = "%02d/%02d/%04d".format(d, m + 1, y)
-                fechaNacimiento = fecha
+                formulario.fechaNacimiento = fecha
                 mostrarDatePicker = false
             },
             anioInicial, mesInicial, diaInicial
@@ -108,8 +116,12 @@ fun Registro (
         Text(text = "Inserte los datos del usuario:", modifier = modifier)
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = nombre,
-            onValueChange = { nombre = it },
+            value = formulario.nombre,
+            onValueChange = { formulario = formulario.copy(nombre = it) },
+//            onValueChange = {
+//                nombre = it
+//                formulario.nombre = it
+//            },
             label = { Text("Nombre") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -117,8 +129,12 @@ fun Registro (
         )
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = apellidos,
-            onValueChange = { apellidos = it },
+            value = formulario.apellidos,
+            onValueChange = { formulario = formulario.copy(apellidos = it) },
+//            onValueChange = {
+//                apellidos = it
+//                formulario.apellidos = it
+//            },
             label = { Text("Apellidos") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -126,8 +142,12 @@ fun Registro (
         )
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = dni,
-            onValueChange = { dni = it },
+            value = formulario.dni,
+            onValueChange = { formulario = formulario.copy(dni = it) },
+//            onValueChange = {
+//                dni = it
+//                formulario.dni = it
+//            },
             label = { Text("DNI") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -135,8 +155,12 @@ fun Registro (
         )
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = peso,
-            onValueChange = { peso = it },
+            value = formulario.peso,
+            onValueChange = { formulario = formulario.copy(peso = it) },
+//            onValueChange = {
+//                peso = it
+//                formulario.peso = it
+//            },
             label = { Text("Peso") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -144,8 +168,12 @@ fun Registro (
         )
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = altura,
-            onValueChange = { altura = it },
+            value = formulario.altura,
+            onValueChange = { formulario = formulario.copy(altura = it) },
+//            onValueChange = {
+//                altura = it
+//                formulario.altura = it
+//            },
             label = { Text("Altura") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
@@ -153,8 +181,12 @@ fun Registro (
         )
         Spacer(modifier = modifier.padding(top = 16.dp))
         OutlinedTextField(
-            value = fechaNacimiento,
-            onValueChange = {},
+            value = formulario.fechaNacimiento,
+            onValueChange = { formulario = formulario.copy(fechaNacimiento = it) },
+//            onValueChange = {
+//                fechaNacimiento = it
+//                formulario.fechaNacimiento = it
+//            },
             modifier = Modifier
                 .clickable { mostrarDatePicker = true },
             label = { Text("Fecha de nacimiento") },
@@ -171,7 +203,14 @@ fun Registro (
             }
         )
         Spacer(modifier = modifier.padding(top = 24.dp))
-        Button(onClick = {  },
+        Button(
+            onClick = {
+                UsuarioActual.formulario = formulario
+                CoroutineScope(Dispatchers.IO).launch {
+                    FormularioPrefs.guardarFormulario(context, formulario)
+                }
+                navController.navigate("pantallaPrincipal")
+        },
             colors = ButtonDefaults.run {
                 buttonColors(
                     containerColor = PrimaryColor,
