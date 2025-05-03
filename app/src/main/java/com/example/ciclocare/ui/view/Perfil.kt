@@ -3,6 +3,7 @@ package com.example.ciclocare.ui.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ciclocare.R
 import com.example.ciclocare.ui.constants.Formulario
 import com.example.ciclocare.ui.theme.PrimaryColor
@@ -42,12 +44,19 @@ fun Perfil(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            Text(
+                text = "Perfil",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Image(
                 painter = painterResource(id = R.drawable.perfil),
                 contentDescription = "Imagen de perfil",
@@ -60,7 +69,9 @@ fun Perfil(
             Spacer(modifier = Modifier.height(16.dp))
 
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(6.dp)
             ) {
@@ -105,15 +116,16 @@ fun Perfil(
                     } else {
                         Text(
                             text = "Nombre: ${formulario.nombre}",
+                            fontSize = 18.sp,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryColor
                         )
-                        Text("Apellidos: ${formulario.apellidos}")
-                        Text("Fecha de nacimiento: ${formulario.fechaNacimiento}")
-                        Text("DNI: ${formulario.dni}")
-                        Text("Peso: ${formulario.peso}")
-                        Text("Altura: ${formulario.altura}")
+                        Text("Apellidos: ${formulario.apellidos}",  fontSize = 16.sp)
+                        Text("Fecha de nacimiento: ${formulario.fechaNacimiento}", fontSize = 16.sp)
+                        Text("DNI: ${formulario.dni}", fontSize = 16.sp)
+                        Text("Peso: ${formulario.peso}", fontSize = 16.sp)
+                        Text("Altura: ${formulario.altura}", fontSize = 16.sp)
                     }
                 }
             }
