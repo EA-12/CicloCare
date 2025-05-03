@@ -52,7 +52,7 @@ fun App() {
     NavHost(navController = navController, startDestination = "login") {
         composable("login") { LogIn(onFormularioChange = { formulario = it }, navController) }
         composable("pantallaPrincipal") { BottomNavScreen(navController, formulario) }
-        composable("registro") { formulario = Registro(formulario, navController) }
+        //composable("registro") { formulario = Registro(formulario, navController) }
         composable("perfil") { Perfil(formulario, navController) }
         composable("cuestionarios") { Cuestionarios(navController) }
     }

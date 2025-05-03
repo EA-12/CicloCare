@@ -75,7 +75,7 @@ fun Consejos(
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFF0F3) // fondo blanco con tono rosado claro
+                        containerColor = Color(0xFFFFF0F3)
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
@@ -96,6 +96,18 @@ fun Consejos(
                     }
                 }
             }
+
+            // ✅ Aquí está corregido el Spacer
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
         }
+
     }
 }
+
+
+
+
+
+

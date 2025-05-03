@@ -34,6 +34,7 @@ fun Perfil(
             .fillMaxSize()
             .padding(16.dp),
         color = Color(0xFFD8EFFE) // Fondo pastel azul
+
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
