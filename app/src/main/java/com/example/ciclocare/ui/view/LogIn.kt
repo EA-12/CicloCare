@@ -42,7 +42,6 @@ fun LogIn (
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -50,12 +49,14 @@ fun LogIn (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        /*
         Text(
             text = "Log in",
             modifier = modifier,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
+        */
 
         Image(
             painter = painterResource(id = R.drawable.logo),
