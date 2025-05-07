@@ -7,4 +7,7 @@ data class Formulario (
     var dni: String = "",
     var peso: String = "",
     var altura: String = "",
+    var contrasena: String = "",    // NUEVO CAMPO
+    var ultimoPeriodo: String = ""  // NUEVO CAMPO
 )
+

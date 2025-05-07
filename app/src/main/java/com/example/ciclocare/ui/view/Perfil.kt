@@ -113,6 +113,24 @@ fun Perfil(
                             label = { Text("Altura") },
                             modifier = Modifier.fillMaxWidth()
                         )
+
+                        // NUEVO: Campo contraseña
+                        OutlinedTextField(
+                            value = formulario.contrasena ?: "",
+                            onValueChange = { formulario = formulario.copy(contrasena = it) },
+                            label = { Text("Contraseña") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        // NUEVO: Campo último período
+                        OutlinedTextField(
+                            value = formulario.ultimoPeriodo ?: "",
+                            onValueChange = { formulario = formulario.copy(ultimoPeriodo = it) },
+                            label = { Text("Último período (dd/MM/yyyy)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true
+                        )
+
                     } else {
                         Text(
                             text = "Nombre: ${formulario.nombre}",
@@ -121,14 +139,20 @@ fun Perfil(
                             fontWeight = FontWeight.Bold,
                             color = PrimaryColor
                         )
-                        Text("Apellidos: ${formulario.apellidos}",  fontSize = 16.sp)
+                        Text("Apellidos: ${formulario.apellidos}", fontSize = 16.sp)
                         Text("Fecha de nacimiento: ${formulario.fechaNacimiento}", fontSize = 16.sp)
                         Text("DNI: ${formulario.dni}", fontSize = 16.sp)
                         Text("Peso: ${formulario.peso}", fontSize = 16.sp)
                         Text("Altura: ${formulario.altura}", fontSize = 16.sp)
+
+                        // Mostrar también la contraseña y último periodo si existen
+                        Text("Contraseña: ${formulario.contrasena ?: "-"}", fontSize = 16.sp)
+                        Text("Último período: ${formulario.ultimoPeriodo ?: "-"}", fontSize = 16.sp)
                     }
                 }
+
             }
+
 
             Spacer(modifier = Modifier.height(24.dp))
 

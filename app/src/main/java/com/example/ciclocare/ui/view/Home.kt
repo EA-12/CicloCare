@@ -46,7 +46,7 @@ fun Home (
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding( top = 48.dp)
+            .padding(top = 48.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,31 +72,40 @@ fun Home (
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "App logo"
         )
+
         Text(
             text = "¡Bienvenida a CicloCare, ${UsuarioActual.formulario.nombre.replaceFirstChar { it.uppercase() }}!",
             modifier = modifier.padding(top = 16.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
+
         Spacer(modifier = Modifier.height(16.dp))
 
+        //  CALCULAR PRÓXIMO PERIODO
+        val formatoFecha = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val proximoPeriodo = try {
+            UsuarioActual.formulario.ultimoPeriodo?.let {
+                val fechaUltimo = LocalDate.parse(it, formatoFecha)
+                fechaUltimo.plusDays(28).format(formatoFecha)
+            } ?: "-"
+        } catch (e: Exception) {
+            "-"
+        }
+
         Text(
-            text="Tu próximo ciclo comienza en 7 días",
+            text = "Tu próximo ciclo comienza el $proximoPeriodo",
             fontSize = 16.sp,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-        // Obtener contexto y preferencias
+
         val context = LocalContext.current
         val sharedPref = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
 
-        // Obtener fecha de hoy
         val fechaHoy = LocalDate.now().toString()
-
-        // Obtener la última fecha en la que se completó el cuestionario
         val fechaUltimoCuestionario = sharedPref.getString("fecha_cuestionario", "")
 
-        // Mostrar aviso solo si no se ha completado hoy
         if (fechaHoy != fechaUltimoCuestionario) {
             Aviso(
                 texto = "¡No olvides rellenar el cuestionario de hoy!",
@@ -104,24 +113,6 @@ fun Home (
                 onClickFn = { navController.navigate("cuestionarios") },
             )
         }
-
-
-        //Aviso(
-          //  texto = "¡No olvides rellenar el cuestionario de hoy!",
-            //textoBoton = "Rellenar",
-            //onClickFn = { navController.navigate("cuestionarios") },
-        //)
-
-        /*
-        // Descomentar para mostrar el calendario como imagen
-        Image(
-            painter = painterResource(id = R.drawable.calendario),
-            contentDescription = "Calendario",
-            modifier = Modifier
-                .width(500.dp)
-                .height(300.dp)
-        )
-        */
 
         Calendario(modifier = Modifier.padding(20.dp))
 

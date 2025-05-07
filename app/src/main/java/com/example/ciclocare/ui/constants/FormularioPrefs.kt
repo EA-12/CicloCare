@@ -16,6 +16,7 @@ object FormularioPrefs {
     private val DNI = stringPreferencesKey("dni")
     private val PESO = stringPreferencesKey("peso")
     private val ALTURA = stringPreferencesKey("altura")
+    private val CONTRASENA = stringPreferencesKey("contrasena")
 
     suspend fun guardarFormulario(context: Context, formulario: Formulario) {
         context.dataStore.edit { prefs ->
@@ -25,6 +26,7 @@ object FormularioPrefs {
             prefs[DNI] = formulario.dni
             prefs[PESO] = formulario.peso
             prefs[ALTURA] = formulario.altura
+            prefs[CONTRASENA] = formulario.contrasena
         }
     }
 
@@ -36,7 +38,9 @@ object FormularioPrefs {
             fechaNacimiento = prefs[FECHA_NACIMIENTO] ?: "",
             dni = prefs[DNI] ?: "",
             peso = prefs[PESO] ?: "",
-            altura = prefs[ALTURA] ?: ""
+            altura = prefs[ALTURA] ?: "",
+            contrasena = prefs[CONTRASENA] ?: ""
+
         )
     }
 

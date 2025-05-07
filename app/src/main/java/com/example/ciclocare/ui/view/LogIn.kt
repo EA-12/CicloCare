@@ -105,7 +105,7 @@ fun LogIn (
             CoroutineScope(Dispatchers.IO).launch {
                 val formulario = FormularioPrefs.cargarFormulario(context)
 
-                if (formulario.dni == username) {
+                if (formulario.dni == username && formulario.contrasena == password) {
                     UsuarioActual.formulario = formulario
                     withContext(Dispatchers.Main) {
                         navController.navigate("pantallaPrincipal")
@@ -118,18 +118,21 @@ fun LogIn (
                         dni = "admin",
                         peso = "-",
                         altura = "-",
-                        fechaNacimiento = "-"
+                        fechaNacimiento = "-",
+                        contrasena = "admin"
                     )
                     withContext(Dispatchers.Main) {
                         navController.navigate("pantallaPrincipal")
                     }
-            } else {
+                } else {
                     withContext(Dispatchers.Main) {
                         errorMessage = "DNI o contraseña incorrectos"
                     }
                 }
             }
         },
+
+
             colors = ButtonDefaults.buttonColors(
                 containerColor = PrimaryColor,
                 contentColor = Color.White

@@ -2,79 +2,48 @@ package com.example.ciclocare.ui.view
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.ciclocare.R
-import com.example.ciclocare.ui.theme.PrimaryColor
-import java.util.Calendar
 import com.example.ciclocare.ui.constants.FormularioPrefs
 import com.example.ciclocare.ui.constants.UsuarioActual
+import com.example.ciclocare.ui.theme.PrimaryColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.navigation.NavController
+import java.text.SimpleDateFormat
+import java.util.*
+
 @Composable
-fun Registro (
-    //formulario: Formulario,
+fun Registro(
     navController: NavController,
     modifier: Modifier = Modifier
-){
-//: Formulario {
-
+) {
     val context = LocalContext.current
-//    var calendario = Calendar.getInstance()
-//    val anio = calendario.get(Calendar.YEAR)
-//    val mes = calendario.get(Calendar.MONTH)
-//    val dia = calendario.get(Calendar.DAY_OF_MONTH)
-//
-//    var nombre by remember { mutableStateOf("") }
-//    var apellidos by remember { mutableStateOf("") }
-//    var dni by remember { mutableStateOf("") }
-//    var peso by remember { mutableStateOf("") }
-//    var altura by remember { mutableStateOf("") }
-//    var fechaNacimiento by remember { mutableStateOf("") }
     var formulario by remember { mutableStateOf(UsuarioActual.formulario) }
-    var mostrarDatePicker by remember { mutableStateOf(false) }
+    var mostrarDatePickerNacimiento by remember { mutableStateOf(false) }
+    var mostrarDatePickerUltimoPeriodo by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
-    if (mostrarDatePicker) {
+    if (mostrarDatePickerNacimiento) {
         val calendarioInicial = if (formulario.fechaNacimiento.isNotEmpty()) {
             val partes = formulario.fechaNacimiento.split("/")
             Calendar.getInstance().apply {
@@ -86,18 +55,31 @@ fun Registro (
             Calendar.getInstance()
         }
 
-        val anioInicial = calendarioInicial.get(Calendar.YEAR)
-        val mesInicial = calendarioInicial.get(Calendar.MONTH)
-        val diaInicial = calendarioInicial.get(Calendar.DAY_OF_MONTH)
+        DatePickerDialog(
+            context,
+            { _, y, m, d ->
+                formulario = formulario.copy(fechaNacimiento = "%02d/%02d/%04d".format(d, m + 1, y))
+                mostrarDatePickerNacimiento = false
+            },
+            calendarioInicial.get(Calendar.YEAR),
+            calendarioInicial.get(Calendar.MONTH),
+            calendarioInicial.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    if (mostrarDatePickerUltimoPeriodo) {
+        val calendario = Calendar.getInstance()
 
         DatePickerDialog(
             context,
             { _, y, m, d ->
                 val fecha = "%02d/%02d/%04d".format(d, m + 1, y)
-                formulario.fechaNacimiento = fecha
-                mostrarDatePicker = false
+                formulario = formulario.copy(ultimoPeriodo = fecha)
+                mostrarDatePickerUltimoPeriodo = false
             },
-            anioInicial, mesInicial, diaInicial
+            calendario.get(Calendar.YEAR),
+            calendario.get(Calendar.MONTH),
+            calendario.get(Calendar.DAY_OF_MONTH)
         ).show()
     }
 
@@ -113,88 +95,65 @@ fun Registro (
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "App logo"
         )
-        Text(text = "Inserte los datos del usuario:", modifier = modifier)
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Text(text = "Inserte los datos del usuario:")
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = formulario.nombre,
             onValueChange = { formulario = formulario.copy(nombre = it) },
-//            onValueChange = {
-//                nombre = it
-//                formulario.nombre = it
-//            },
             label = { Text("Nombre") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
             )
         )
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = formulario.apellidos,
             onValueChange = { formulario = formulario.copy(apellidos = it) },
-//            onValueChange = {
-//                apellidos = it
-//                formulario.apellidos = it
-//            },
             label = { Text("Apellidos") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences
             )
         )
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = formulario.dni,
             onValueChange = { formulario = formulario.copy(dni = it) },
-//            onValueChange = {
-//                dni = it
-//                formulario.dni = it
-//            },
-            label = { Text("DNI") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
-            )
+            label = { Text("DNI") }
         )
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = formulario.peso,
             onValueChange = { formulario = formulario.copy(peso = it) },
-//            onValueChange = {
-//                peso = it
-//                formulario.peso = it
-//            },
-            label = { Text("Peso") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
-            )
+            label = { Text("Peso") }
         )
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = formulario.altura,
             onValueChange = { formulario = formulario.copy(altura = it) },
-//            onValueChange = {
-//                altura = it
-//                formulario.altura = it
-//            },
-            label = { Text("Altura") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
-            )
+            label = { Text("Altura") }
         )
-        Spacer(modifier = modifier.padding(top = 16.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Fecha de nacimiento
         OutlinedTextField(
             value = formulario.fechaNacimiento,
-            onValueChange = { formulario = formulario.copy(fechaNacimiento = it) },
-//            onValueChange = {
-//                fechaNacimiento = it
-//                formulario.fechaNacimiento = it
-//            },
-            modifier = Modifier
-                .clickable { mostrarDatePicker = true },
+            onValueChange = {},
+            modifier = Modifier.clickable { mostrarDatePickerNacimiento = true },
             label = { Text("Fecha de nacimiento") },
             readOnly = true,
             trailingIcon = {
-                IconButton(
-                    onClick = { mostrarDatePicker = !mostrarDatePicker }
-                ) {
+                IconButton(onClick = { mostrarDatePickerNacimiento = true }) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "Seleccionar fecha"
@@ -202,7 +161,38 @@ fun Registro (
                 }
             }
         )
-        Spacer(modifier = modifier.padding(top = 24.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Contraseña
+        OutlinedTextField(
+            value = formulario.contrasena ?: "",
+            onValueChange = { formulario = formulario.copy(contrasena = it) },
+            label = { Text("Contraseña") },
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Último período
+        OutlinedTextField(
+            value = formulario.ultimoPeriodo ?: "",
+            onValueChange = {},
+            modifier = Modifier.clickable { mostrarDatePickerUltimoPeriodo = true },
+            label = { Text("Último período") },
+            readOnly = true,
+            trailingIcon = {
+                IconButton(onClick = { mostrarDatePickerUltimoPeriodo = true }) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Seleccionar fecha"
+                    )
+                }
+            }
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Button(
             onClick = {
                 UsuarioActual.formulario = formulario
@@ -210,18 +200,19 @@ fun Registro (
                     FormularioPrefs.guardarFormulario(context, formulario)
                 }
                 navController.navigate("pantallaPrincipal")
-        },
-            colors = ButtonDefaults.run {
-                buttonColors(
-                    containerColor = PrimaryColor,
-                    contentColor = Color.White
-                )
             },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PrimaryColor,
+                contentColor = Color.White
+            ),
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.height(50.dp).width(200.dp)
+            modifier = Modifier
+                .height(50.dp)
+                .width(200.dp)
         ) {
             Text("Enviar")
         }
-        Spacer(modifier = modifier.padding(top = 80.dp))
+
+        Spacer(modifier = Modifier.height(80.dp))
     }
 }
