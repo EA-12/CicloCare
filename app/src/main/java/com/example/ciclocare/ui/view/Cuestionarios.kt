@@ -12,12 +12,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ciclocare.ui.theme.PrimaryColor
+//imports para que el aviso aparezca cada dia y solo si no se ha hecho el cuestionario
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
+import java.time.LocalDate
+
 
 // ✅ IMPORTS NECESARIOS PARA USAR 'by mutableStateOf'
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Cuestionarios(
     navController: NavController,
@@ -53,9 +61,18 @@ fun Cuestionarios(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón para enviar
+        val context = LocalContext.current
+
         Button(
-            onClick = { navController.navigate("pantallaPrincipal") },
+            onClick = {
+                // Guardar la fecha actual como "cuestionario completado hoy"
+                val fechaHoy = LocalDate.now().toString()
+                val sharedPref = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                sharedPref.edit().putString("fecha_cuestionario", fechaHoy).apply()
+
+                // Navegar de vuelta
+                navController.navigate("pantallaPrincipal")
+            },
             colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor),
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,6 +85,23 @@ fun Cuestionarios(
                 fontSize = 16.sp
             )
         }
+
+
+        // Botón para enviar
+//        Button(
+//            onClick = { navController.navigate("pantallaPrincipal") },
+//            colors = ButtonDefaults.buttonColors(containerColor = PrimaryColor),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 16.dp)
+//                .align(Alignment.CenterHorizontally)
+//        ) {
+//            Text(
+//                text = "Enviar",
+//                color = Color.White,
+//                fontSize = 16.sp
+//            )
+//        }
 
         Spacer(modifier = Modifier.height(200.dp))
     }

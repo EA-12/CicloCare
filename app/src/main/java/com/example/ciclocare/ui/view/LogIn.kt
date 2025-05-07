@@ -1,5 +1,6 @@
 package com.example.ciclocare.ui.view
 
+import android.os.Build.VERSION_CODES.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,7 +60,7 @@ fun LogIn (
         */
 
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = com.example.ciclocare.R.drawable.logo),
             contentDescription = "App logo"
         )
 

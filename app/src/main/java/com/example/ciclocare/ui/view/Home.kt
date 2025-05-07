@@ -30,7 +30,14 @@ import com.example.ciclocare.ui.components.Aviso
 import com.example.ciclocare.ui.components.Calendario
 import com.example.ciclocare.ui.constants.UsuarioActual
 import com.example.ciclocare.ui.theme.PrimaryColor
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
+import java.time.LocalDate
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Home (
     navController: NavController,
@@ -79,12 +86,31 @@ fun Home (
         )
 
         Spacer(modifier = Modifier.height(20.dp))
+        // Obtener contexto y preferencias
+        val context = LocalContext.current
+        val sharedPref = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
 
-        Aviso(
-            texto = "¡No olvides rellenar el cuestionario de hoy!",
-            textoBoton = "Rellenar",
-            onClickFn = { navController.navigate("cuestionarios") },
-        )
+        // Obtener fecha de hoy
+        val fechaHoy = LocalDate.now().toString()
+
+        // Obtener la última fecha en la que se completó el cuestionario
+        val fechaUltimoCuestionario = sharedPref.getString("fecha_cuestionario", "")
+
+        // Mostrar aviso solo si no se ha completado hoy
+        if (fechaHoy != fechaUltimoCuestionario) {
+            Aviso(
+                texto = "¡No olvides rellenar el cuestionario de hoy!",
+                textoBoton = "Rellenar",
+                onClickFn = { navController.navigate("cuestionarios") },
+            )
+        }
+
+
+        //Aviso(
+          //  texto = "¡No olvides rellenar el cuestionario de hoy!",
+            //textoBoton = "Rellenar",
+            //onClickFn = { navController.navigate("cuestionarios") },
+        //)
 
         /*
         // Descomentar para mostrar el calendario como imagen
