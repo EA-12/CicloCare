@@ -101,7 +101,10 @@ fun LogIn (
         val context = LocalContext.current
         Button(onClick = {
             errorMessage = null // limpiamos mensaje anterior
-
+            if (username.isBlank() || password.isBlank()) {
+                errorMessage = "Por favor, complete el DNI y la contraseña"
+                return@Button
+            }
             CoroutineScope(Dispatchers.IO).launch {
                 val formulario = FormularioPrefs.cargarFormulario(context)
 

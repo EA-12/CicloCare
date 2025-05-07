@@ -40,6 +40,7 @@ fun Registro(
     var formulario by remember { mutableStateOf(UsuarioActual.formulario) }
     var mostrarDatePickerNacimiento by remember { mutableStateOf(false) }
     var mostrarDatePickerUltimoPeriodo by remember { mutableStateOf(false) }
+    var mostrarErrorGeneral by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
@@ -195,11 +196,19 @@ fun Registro(
 
         Button(
             onClick = {
-                UsuarioActual.formulario = formulario
-                CoroutineScope(Dispatchers.IO).launch {
-                    FormularioPrefs.guardarFormulario(context, formulario)
+                if (formulario.nombre.isBlank() ||
+                    formulario.dni.isBlank() ||
+                    formulario.contrasena.isNullOrBlank() ||
+                    formulario.ultimoPeriodo.isNullOrBlank()) {
+                    mostrarErrorGeneral = true
+                } else {
+                    mostrarErrorGeneral = false
+                    UsuarioActual.formulario = formulario
+                    CoroutineScope(Dispatchers.IO).launch {
+                        FormularioPrefs.guardarFormulario(context, formulario)
+                    }
+                    navController.navigate("pantallaPrincipal")
                 }
-                navController.navigate("pantallaPrincipal")
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = PrimaryColor,
@@ -212,7 +221,15 @@ fun Registro(
         ) {
             Text("Enviar")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        if (mostrarErrorGeneral) {
+            Text(
+                text = "Por favor, complete los campos obligatorios: Nombre, DNI, Contraseña y Último período.",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 30.dp)
+            )
 
+        }
         Spacer(modifier = Modifier.height(80.dp))
     }
 }
