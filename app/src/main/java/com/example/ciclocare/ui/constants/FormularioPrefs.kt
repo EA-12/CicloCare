@@ -23,7 +23,6 @@ object FormularioPrefs {
             prefs[NOMBRE] = formulario.nombre
             prefs[APELLIDOS] = formulario.apellidos
             prefs[FECHA_NACIMIENTO] = formulario.fechaNacimiento
-            prefs[DNI] = formulario.dni
             prefs[PESO] = formulario.peso
             prefs[ALTURA] = formulario.altura
             prefs[CONTRASENA] = formulario.contrasena
@@ -36,7 +35,6 @@ object FormularioPrefs {
             nombre = prefs[NOMBRE] ?: "",
             apellidos = prefs[APELLIDOS] ?: "",
             fechaNacimiento = prefs[FECHA_NACIMIENTO] ?: "",
-            dni = prefs[DNI] ?: "",
             peso = prefs[PESO] ?: "",
             altura = prefs[ALTURA] ?: "",
             contrasena = prefs[CONTRASENA] ?: ""

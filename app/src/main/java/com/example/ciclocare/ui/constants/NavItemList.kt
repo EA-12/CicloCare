@@ -8,9 +8,9 @@ import androidx.compose.material.icons.filled.Info
 
 object NavItemList {
     val navItemList = listOf(
-        NavItem("Home", Icons.Default.Home),
-        NavItem("Forms", Icons.Default.DateRange),
-        NavItem("Monitoring", Icons.Default.Favorite),
-        NavItem("Advice", Icons.Default.Info),
+        NavItem("Inicio", Icons.Default.Home),
+        NavItem("Formulario", Icons.Default.DateRange),
+        NavItem("Sensor", Icons.Default.Favorite),
+        NavItem("Consejos", Icons.Default.Info),
     )
 }

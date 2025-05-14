@@ -1,10 +1,12 @@
- package com.example.ciclocare
+package com.example.ciclocare
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -31,7 +33,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
- class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,7 @@ import androidx.navigation.compose.rememberNavController
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun App() {
     val navController = rememberNavController()
@@ -57,6 +61,7 @@ fun App() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomNavScreen (navController: NavController) {
@@ -76,6 +81,7 @@ fun BottomNavScreen (navController: NavController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContentScreen (selectedIndex: Int, navController: NavController) {
     when(selectedIndex) {
@@ -86,6 +92,7 @@ fun ContentScreen (selectedIndex: Int, navController: NavController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
