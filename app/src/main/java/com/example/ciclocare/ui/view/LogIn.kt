@@ -1,6 +1,5 @@
 package com.example.ciclocare.ui.view
 
-import android.os.Build.VERSION_CODES.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,11 +34,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LogIn (
+fun LogIn(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -50,26 +49,17 @@ fun LogIn (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        /*
-        Text(
-            text = "Log in",
-            modifier = modifier,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
-        )
-        */
-
         Image(
-            painter = painterResource(id = com.example.ciclocare.R.drawable.logo),
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "App logo"
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("DNI") },
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Correo electrónico") },
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
@@ -98,44 +88,43 @@ fun LogIn (
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        val context = LocalContext.current
-        Button(onClick = {
-            errorMessage = null // limpiamos mensaje anterior
-            if (username.isBlank() || password.isBlank()) {
-                errorMessage = "Por favor, complete el DNI y la contraseña"
-                return@Button
-            }
-            CoroutineScope(Dispatchers.IO).launch {
-                val formulario = FormularioPrefs.cargarFormulario(context)
 
-                if (formulario.dni == username && formulario.contrasena == password) {
-                    UsuarioActual.formulario = formulario
-                    withContext(Dispatchers.Main) {
-                        navController.navigate("pantallaPrincipal")
-                    }
-                } else if (username == "admin" && password == "admin") {
-                    // Carga un usuario falso para pruebas
-                    UsuarioActual.formulario = Formulario(
-                        nombre = "Administrador",
-                        apellidos = "App",
-                        dni = "admin",
-                        peso = "-",
-                        altura = "-",
-                        fechaNacimiento = "-",
-                        contrasena = "admin"
-                    )
-                    withContext(Dispatchers.Main) {
-                        navController.navigate("pantallaPrincipal")
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        errorMessage = "DNI o contraseña incorrectos"
+        val context = LocalContext.current
+        Button(
+            onClick = {
+                errorMessage = null
+                if (email.isBlank() || password.isBlank()) {
+                    errorMessage = "Por favor, introduzca correo y contraseña"
+                    return@Button
+                }
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val formulario = FormularioPrefs.cargarFormulario(context)
+
+                    if (formulario.email == email && formulario.contrasena == password) {
+                        UsuarioActual.formulario = formulario
+                        withContext(Dispatchers.Main) {
+                            navController.navigate("pantallaPrincipal")
+                        }
+                    } else if (email == "admin" && password == "admin") {
+                        UsuarioActual.formulario = Formulario(
+                            email = "admin",
+                            edad = "-",
+                            peso = "-",
+                            altura = "-",
+                            contrasena = "admin",
+                            ultimoPeriodo = "-"
+                        )
+                        withContext(Dispatchers.Main) {
+                            navController.navigate("pantallaPrincipal")
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            errorMessage = "Correo o contraseña incorrectos"
+                        }
                     }
                 }
-            }
-        },
-
-
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = PrimaryColor,
                 contentColor = Color.White
@@ -143,7 +132,6 @@ fun LogIn (
         ) {
             Text("Iniciar sesión")
         }
-
 
         if (errorMessage != null) {
             Text(
@@ -154,10 +142,8 @@ fun LogIn (
             )
         }
 
-
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Texto clicable para registrarse
         Text(
             text = "¿No está registrada? Regístrese",
             color = PrimaryColor,

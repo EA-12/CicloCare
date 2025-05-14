@@ -38,35 +38,10 @@ fun Registro(
 ) {
     val context = LocalContext.current
     var formulario by remember { mutableStateOf(UsuarioActual.formulario) }
-    var mostrarDatePickerNacimiento by remember { mutableStateOf(false) }
     var mostrarDatePickerUltimoPeriodo by remember { mutableStateOf(false) }
     var mostrarErrorGeneral by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
-
-    if (mostrarDatePickerNacimiento) {
-        val calendarioInicial = if (formulario.fechaNacimiento.isNotEmpty()) {
-            val partes = formulario.fechaNacimiento.split("/")
-            Calendar.getInstance().apply {
-                set(Calendar.DAY_OF_MONTH, partes[0].toInt())
-                set(Calendar.MONTH, partes[1].toInt() - 1)
-                set(Calendar.YEAR, partes[2].toInt())
-            }
-        } else {
-            Calendar.getInstance()
-        }
-
-        DatePickerDialog(
-            context,
-            { _, y, m, d ->
-                formulario = formulario.copy(fechaNacimiento = "%02d/%02d/%04d".format(d, m + 1, y))
-                mostrarDatePickerNacimiento = false
-            },
-            calendarioInicial.get(Calendar.YEAR),
-            calendarioInicial.get(Calendar.MONTH),
-            calendarioInicial.get(Calendar.DAY_OF_MONTH)
-        ).show()
-    }
 
     if (mostrarDatePickerUltimoPeriodo) {
         val calendario = Calendar.getInstance()
@@ -97,35 +72,36 @@ fun Registro(
             contentDescription = "App logo"
         )
 
-        Text(text = "Inserte los datos del usuario:")
+        Text(text = "Registro de usuario")
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Campo nombre
         OutlinedTextField(
             value = formulario.nombre,
             onValueChange = { formulario = formulario.copy(nombre = it) },
             label = { Text("Nombre") },
             keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
+                capitalization = KeyboardCapitalization.Words
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = formulario.apellidos,
-            onValueChange = { formulario = formulario.copy(apellidos = it) },
-            label = { Text("Apellidos") },
+            value = formulario.email ?: "",
+            onValueChange = { formulario = formulario.copy(email = it) },
+            label = { Text("Correo electrónico") },
             keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences
+                capitalization = KeyboardCapitalization.None
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = formulario.dni,
-            onValueChange = { formulario = formulario.copy(dni = it) },
-            label = { Text("DNI") }
+            value = formulario.edad ?: "",
+            onValueChange = { formulario = formulario.copy(edad = it) },
+            label = { Text("Edad") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -133,7 +109,7 @@ fun Registro(
         OutlinedTextField(
             value = formulario.peso,
             onValueChange = { formulario = formulario.copy(peso = it) },
-            label = { Text("Peso") }
+            label = { Text("Peso (kg)") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -141,31 +117,11 @@ fun Registro(
         OutlinedTextField(
             value = formulario.altura,
             onValueChange = { formulario = formulario.copy(altura = it) },
-            label = { Text("Altura") }
+            label = { Text("Altura (cm)") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Fecha de nacimiento
-        OutlinedTextField(
-            value = formulario.fechaNacimiento,
-            onValueChange = {},
-            modifier = Modifier.clickable { mostrarDatePickerNacimiento = true },
-            label = { Text("Fecha de nacimiento") },
-            readOnly = true,
-            trailingIcon = {
-                IconButton(onClick = { mostrarDatePickerNacimiento = true }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Seleccionar fecha"
-                    )
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Contraseña
         OutlinedTextField(
             value = formulario.contrasena ?: "",
             onValueChange = { formulario = formulario.copy(contrasena = it) },
@@ -175,7 +131,6 @@ fun Registro(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Último período
         OutlinedTextField(
             value = formulario.ultimoPeriodo ?: "",
             onValueChange = {},
@@ -197,7 +152,7 @@ fun Registro(
         Button(
             onClick = {
                 if (formulario.nombre.isBlank() ||
-                    formulario.dni.isBlank() ||
+                    formulario.email.isNullOrBlank() ||
                     formulario.contrasena.isNullOrBlank() ||
                     formulario.ultimoPeriodo.isNullOrBlank()) {
                     mostrarErrorGeneral = true
@@ -221,15 +176,19 @@ fun Registro(
         ) {
             Text("Enviar")
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         if (mostrarErrorGeneral) {
             Text(
-                text = "Por favor, complete los campos obligatorios: Nombre, DNI, Contraseña y Último período.",
+                text = "Por favor, complete los campos obligatorios: Nombre, Correo, Contraseña y Último período.",
                 color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 30.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 30.dp)
             )
-
         }
+
         Spacer(modifier = Modifier.height(80.dp))
     }
 }

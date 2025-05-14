@@ -45,7 +45,9 @@ fun Perfil(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -56,7 +58,9 @@ fun Perfil(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Image(
                 painter = painterResource(id = R.drawable.perfil),
                 contentDescription = "Imagen de perfil",
@@ -84,45 +88,35 @@ fun Perfil(
                             modifier = Modifier.fillMaxWidth()
                         )
                         OutlinedTextField(
-                            value = formulario.apellidos,
-                            onValueChange = { formulario = formulario.copy(apellidos = it) },
-                            label = { Text("Apellidos") },
+                            value = formulario.email ?: "",
+                            onValueChange = { formulario = formulario.copy(email = it) },
+                            label = { Text("Correo electrónico") },
                             modifier = Modifier.fillMaxWidth()
                         )
                         OutlinedTextField(
-                            value = formulario.fechaNacimiento,
-                            onValueChange = { formulario = formulario.copy(fechaNacimiento = it) },
-                            label = { Text("Fecha de nacimiento") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        OutlinedTextField(
-                            value = formulario.dni,
-                            onValueChange = { formulario = formulario.copy(dni = it) },
-                            label = { Text("DNI") },
+                            value = formulario.edad ?: "",
+                            onValueChange = { formulario = formulario.copy(edad = it) },
+                            label = { Text("Edad") },
                             modifier = Modifier.fillMaxWidth()
                         )
                         OutlinedTextField(
                             value = formulario.peso,
                             onValueChange = { formulario = formulario.copy(peso = it) },
-                            label = { Text("Peso") },
+                            label = { Text("Peso (kg)") },
                             modifier = Modifier.fillMaxWidth()
                         )
                         OutlinedTextField(
                             value = formulario.altura,
                             onValueChange = { formulario = formulario.copy(altura = it) },
-                            label = { Text("Altura") },
+                            label = { Text("Altura (cm)") },
                             modifier = Modifier.fillMaxWidth()
                         )
-
-                        // NUEVO: Campo contraseña
                         OutlinedTextField(
                             value = formulario.contrasena ?: "",
                             onValueChange = { formulario = formulario.copy(contrasena = it) },
                             label = { Text("Contraseña") },
                             modifier = Modifier.fillMaxWidth()
                         )
-
-                        // NUEVO: Campo último período
                         OutlinedTextField(
                             value = formulario.ultimoPeriodo ?: "",
                             onValueChange = { formulario = formulario.copy(ultimoPeriodo = it) },
@@ -130,7 +124,6 @@ fun Perfil(
                             modifier = Modifier.fillMaxWidth(),
                             readOnly = true
                         )
-
                     } else {
                         Text(
                             text = "Nombre: ${formulario.nombre}",
@@ -139,20 +132,15 @@ fun Perfil(
                             fontWeight = FontWeight.Bold,
                             color = PrimaryColor
                         )
-                        Text("Apellidos: ${formulario.apellidos}", fontSize = 16.sp)
-                        Text("Fecha de nacimiento: ${formulario.fechaNacimiento}", fontSize = 16.sp)
-                        Text("DNI: ${formulario.dni}", fontSize = 16.sp)
+                        Text("Correo: ${formulario.email ?: "-"}", fontSize = 16.sp)
+                        Text("Edad: ${formulario.edad ?: "-"}", fontSize = 16.sp)
                         Text("Peso: ${formulario.peso}", fontSize = 16.sp)
                         Text("Altura: ${formulario.altura}", fontSize = 16.sp)
-
-                        // Mostrar también la contraseña y último periodo si existen
                         Text("Contraseña: ${formulario.contrasena ?: "-"}", fontSize = 16.sp)
                         Text("Último período: ${formulario.ultimoPeriodo ?: "-"}", fontSize = 16.sp)
                     }
                 }
-
             }
-
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -181,19 +169,15 @@ fun Perfil(
             ) {
                 Text("Volver")
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    // 1. Borrar el formulario en memoria
                     UsuarioActual.formulario = Formulario()
-
-                    // 2. Borrar el formulario guardado
                     CoroutineScope(Dispatchers.IO).launch {
-                        FormularioPrefs.guardarFormulario(context, Formulario()) // Guardamos vacío
+                        FormularioPrefs.guardarFormulario(context, Formulario())
                     }
-
-                    // 3. Navegar a login (y limpiar el back stack)
                     navController.navigate("login") {
                         popUpTo("pantallaPrincipal") { inclusive = true }
                     }

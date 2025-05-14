@@ -8,6 +8,11 @@ data class Formulario (
     var peso: String = "",
     var altura: String = "",
     var contrasena: String = "",    // NUEVO CAMPO
-    var ultimoPeriodo: String = ""  // NUEVO CAMPO
-)
+    var ultimoPeriodo: String = "",
+    val email: String = "",
+    val edad:String = "", // NUEVO CAMPO
+) {
+
+
+}
 
