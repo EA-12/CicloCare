@@ -54,10 +54,18 @@ fun Monitorizacion (
 
         // Instrucciones
         Text(
+            text = "Instrucciones para comenzar:",
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = PrimaryColor,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Text(
             text = "1. Active el Bluetooth de su dispositivo.",
             modifier = Modifier.padding(vertical = 0.dp),
             textAlign = TextAlign.Center,
-            color = PrimaryColor,
+            //color = PrimaryColor,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
@@ -65,14 +73,14 @@ fun Monitorizacion (
             text = "2. Encienda el sensor.",
             modifier = Modifier.padding(vertical = 0.dp),
             textAlign = TextAlign.Center,
-            color = PrimaryColor,
+            //color = PrimaryColor,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp)
         Text(
             text = "3. Una vez activado, el sensor medirá continuamente sus niveles hormonales.",
             modifier = Modifier.padding(vertical = 0.dp),
             textAlign = TextAlign.Center,
-            color = PrimaryColor,
+            //color = PrimaryColor,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp)
 
@@ -101,48 +109,52 @@ fun HormoneTabs() {
     Spacer(modifier = Modifier.height(16.dp))
 
     when (selectedTabIndex) {
-        //TENEMOS QUE METER LAS GRÁFICAS DE CADA UNO
-        0 ->{
-            Text(
-                text = "17 mUI/mL",
-                fontSize = 25.sp)
+        0 -> {
+            Text(text = "17 mUI/mL", fontSize = 25.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_lh),
-                contentDescription = "App logo"
+            Image(painter = painterResource(id = R.drawable.img_lh), contentDescription = null)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "La LH suele alcanzar su punto máximo justo antes de la ovulación, entre los días 12 y 16 del ciclo.",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
-        1 ->{
-            Text(
-                text = "4 mUI/mL",
-                fontSize = 25.sp,
-            )
+        1 -> {
+            Text(text = "4 mUI/mL", fontSize = 25.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_fsh),
-                contentDescription = "App logo"
+            Image(painter = painterResource(id = R.drawable.img_fsh), contentDescription = null)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "La FSH estimula el crecimiento de los folículos. Sus niveles son más altos al inicio del ciclo (días 1-5).",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
         2 -> {
-            Text(
-                text = "56.3 pg/mL",
-                fontSize = 25.sp
-            )
+            Text(text = "56.3 pg/mL", fontSize = 25.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_estrog),
-                contentDescription = "App logo"
+            Image(painter = painterResource(id = R.drawable.img_estrog), contentDescription = null)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Los estrógenos aumentan durante la fase folicular y alcanzan su pico justo antes de la ovulación.",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
         3 -> {
-            Text(
-                text = "0.88 ng/mL",
-                fontSize = 25.sp
-            )
+            Text(text = "0.88 ng/mL", fontSize = 25.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Image(
-                painter = painterResource(id = R.drawable.img_progest),
-                contentDescription = "App logo"
+            Image(painter = painterResource(id = R.drawable.img_progest), contentDescription = null)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "La progesterona sube tras la ovulación y es clave en la fase lútea (días 15-28).",
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
     }

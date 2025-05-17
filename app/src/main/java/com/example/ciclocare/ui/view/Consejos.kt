@@ -97,7 +97,6 @@ fun Consejos(
                 }
             }
 
-            // ✅ Aquí está corregido el Spacer
             item {
                 Spacer(modifier = Modifier.height(100.dp))
             }
